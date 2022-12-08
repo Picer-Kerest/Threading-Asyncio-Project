@@ -21,7 +21,7 @@ if __name__ == '__main__':
     futures = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
         # Потоки Foreground
-        # Параллельный запуск
+        # Последовательный запуск, но вывод псевдо-параллельный
         futures.append(executor.submit(div, 5, 25))
         futures.append(executor.submit(div, 3, 25))
         # shutdown вызывается автоматически

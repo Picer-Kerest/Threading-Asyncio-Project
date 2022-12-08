@@ -2,8 +2,9 @@ import asyncio
 
 
 async def fetch_doc(doc):
-    await asyncio.sleep(3) # emulating doc download
+    await asyncio.sleep(3)  # emulating doc download
     return doc
+
 
 async def get_pages(docs):
     for cur_doc in docs:
@@ -12,10 +13,10 @@ async def get_pages(docs):
             await asyncio.sleep(1)
             yield page
 
+
 async def main():
     async for page in get_pages(['doc1', 'doc2']):
         print(f'finally {page}')
 
 if __name__ == '__main__':
     asyncio.run(main())
-

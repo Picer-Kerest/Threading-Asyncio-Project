@@ -25,6 +25,7 @@ async def fetch_ip(service):
     ip = json_response[service.ip_attr]
     return f'{service.name} finished with result: {ip}'
 
+
 async def main():
     coros = [fetch_ip(service) for service in services]
 

@@ -2,7 +2,7 @@ import asyncio
 
 import aiohttp as aiohttp
 
-from multitrhreading.decorators import async_measure_time
+from multithreading.decorators import async_measure_time
 
 
 class Photo:
@@ -17,6 +17,7 @@ class Photo:
     def from_json(cls, obj):
         return Photo(obj['albumId'], obj['id'], obj['title'], obj['url'], obj['thumbnailUrl'])
 
+
 def print_photo_titles(photos):
     for photo in photos:
         print(f'{photo.title}', end='\n')
@@ -30,6 +31,7 @@ async def photos_by_album(task_name, album, session):
     photos_json = await response.json()
 
     return [Photo.from_json(photo) for photo in photos_json]
+
 
 @async_measure_time
 async def main():
@@ -52,4 +54,3 @@ if __name__ == '__main__':
         loop.run_forever()
     finally:
         loop.close()
-

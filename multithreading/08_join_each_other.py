@@ -3,7 +3,10 @@ import time
 
 
 def f1():
-    print('running 1st thread\n')
+    """
+    Взаимный Join.
+    """
+    print('\nrunning 1st thread\n')
     print('f1 joining f2\n')
     time.sleep(2)
     t2.join()

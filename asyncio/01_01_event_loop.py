@@ -1,7 +1,7 @@
 import asyncio
 # import time
 
-# from multitrhreading.decorators import async_measure_time
+# from multithreading.decorators import async_measure_time
 
 
 async def tick():

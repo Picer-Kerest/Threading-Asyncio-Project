@@ -10,6 +10,18 @@ b_lock = threading.Lock()
 
 
 def thread1calc():
+    """
+    Вероятно самый встречающийся
+    Взаимная блокировка на двух ресурсах
+
+
+
+    Output:
+    Thread1 acquiring lock a
+    Thread2 acquiring lock b
+    Thread1 acquiring lock b
+    Thread2 acquiring lock a
+    """
     global a
     global b
 
@@ -37,7 +49,7 @@ def thread2calc():
     b_lock.acquire()
     time.sleep(5)
 
-    print('Thread2 acquiring lock a')
+    print('\nThread2 acquiring lock a')
     a_lock.acquire()
     time.sleep(5)
 

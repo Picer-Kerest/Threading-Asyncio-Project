@@ -15,7 +15,7 @@ async def main():
    # await t1
    # await t2
 
-    results = await  asyncio.gather(t1, t2)
+    results = await asyncio.gather(t1, t2)
 
 
     print(f'{t1.get_name()}. Done = {t1.done()}')
