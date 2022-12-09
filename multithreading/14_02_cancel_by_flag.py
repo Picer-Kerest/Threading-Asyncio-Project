@@ -4,6 +4,7 @@ import time
 from multithreading.count_three_sum import read_ints
 
 should_stop = False
+# Флаг
 
 
 def count_three_sum(ints, thread_name='t'):
@@ -36,10 +37,12 @@ if __name__ == '__main__':
     t1 = threading.Thread(target=count_three_sum, args=(ints,))
     t1.start()
 
-    time.sleep(5)
+    time.sleep(3)
 
+    # До этого момента программа работает, потому что should_stop определён выше как False
+    # Ниже should_stop определяется как True и программа перестаёт работать
     should_stop = True
 
-    time.sleep(2)
+    time.sleep(1)
 
     print('ended main')

@@ -10,7 +10,10 @@ class HorseRace:
         self.horses = ['Artax', 'Frankel', 'Bucephalus', 'Barton']
 
     def lead(self):
-        horse = self.horses.pop()
+        """
+        Проводим гонку
+        """
+        horse = self.horses.pop()  # Возвращает элемент из списка, удаляя его
         time.sleep(random.randrange(1, 5))
         print(f'\n{horse} reached the barrier at: {datetime.datetime.now()}')
         self.barrier.wait()

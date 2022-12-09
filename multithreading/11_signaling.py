@@ -5,28 +5,50 @@ from enum import Enum
 
 
 class Event:
+    """
+    Событие и подписка на событие.
+    Событие это Event, который можно вызвать. И когда мы вызовем объект Event,
+    то отработают функции, которые подписались на это событие
+    Один поток дожидается другого
+    
+
+
+    Class OperationsStatus & Protocol условно не под нашим контролем
+    """
     def __init__(self):
-        self.__handlers = []  # Список обработчиков.
+        self.__handlers = []  # Список обработчиков
 
     def __call__(self, *args, **kwargs):
+        """
+        Объекты Event'a вызываемые
+        """
         for f in self.__handlers:
             f(*args, **kwargs)
 
     def __iadd__(self, handler):
+        """
+        Переопределяем метод +=
+        """
         self.__handlers.append(handler)
         return self
 
     def __isub__(self, handler):
+        """
+        Переопределяем метод -=
+        """
         self.__handlers.remove(handler)
         return self
 
 
 class OperationsStatus(Enum):
+    """
+    Статусы операции
+    """
     FINISHED = 0
     FAULTED = 1
 
 
-class Protocol:  # Низкоуровневая обертка сторонней библилтеки, без возможности модификациию
+class Protocol:  # Низкоуровневая обертка сторонней библиотеки, без возможности модификации
     def __init__(self, port, ip_address):
         self.ip_address = ip_address
         self.port = port
@@ -59,14 +81,14 @@ class Protocol:  # Низкоуровневая обертка сторонне�
         return OperationsStatus.FINISHED if finished else OperationsStatus.FAULTED
 
 
-class BankTerminal:
+class BankTerminal:  # Более высокоуровневая обёртка
     def __init__(self, port, ip_address):
         self.ip_address = ip_address
         self.port = port
         self.protocol = Protocol(port, ip_address)
         self.protocol.message_received += self.on_message_received
 
-        # Создадим примитив синхронизации, что бы подождать завершения выполнее оперции в send.
+        # Создадим примитив синхронизации, что бы подождать завершения выполнение операции в send.
         self.operation_signal = threading.Event()
 
     def on_message_received(self, status):

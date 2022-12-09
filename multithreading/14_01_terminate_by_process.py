@@ -8,11 +8,13 @@ if __name__ == '__main__':
 
     ints = read_ints('..\\data\\1Kints.txt')
 
-    p = multiprocessing.Process(target=count_three_sum, args=(ints,))
+    p = multiprocessing.Process(target=count_three_sum, args=(ints, ))
     p.start()
 
-    time.sleep(5)
+    time.sleep(3)
 
     p.terminate()
+    # Process.terminate() завершает процесс
+    # Все потоки будут завершены
 
     print('ended main')
