@@ -5,26 +5,54 @@ from multithreading.count_three_sum import read_ints
 
 
 class StoppableThread(threading.Thread):
+    """
+    Мы создали объект, который является задачей и мы манипулируем им как Thread'ом
+    super(StoppableThread, self). Так принято
+    """
     def __init__(self, *args, **kwargs):
         super(StoppableThread, self).__init__(*args, **kwargs)
         self.stop_event = threading.Event()
 
     def stop(self):
+        """
+        set True in stop_event
+        Event.set() устанавливает значение внутреннего флага в True
+        """
         self.stop_event.set()
-        # set True in stop_event
 
     def stopped(self):
-        return self.stop_event.set()
+        """
+        Флажок для понимания статуса stop_event
+        Event.is_set() проверяет внутренний флаг
+        """
+        return self.stop_event.is_set()
 
 
 class ThreeSumUnitOfWork(StoppableThread):
+    """
+    Unit of Work абстрагирует поток. Это задача, исполняемая в потоке
+    """
 
     def __init__(self, ints, name='TestThread'):
+        """
+        super(), потому что нужно обратиться к базовому классу Thread.
+        ints передаётся как аргумент, а name - атрибут Thread
+
+        stop_event здесь определять не нужно, он есть в базовом классе
+        """
         super().__init__(name=name)
         self.ints = ints
         #  self.stop_event = threading.Event()
 
     def run(self):
+        """
+        Переопределяем run()
+        Вызывается автоматически, из-за наследования Thread.
+        Поэтому на объекте нашего класса можно будет вызывать start()
+
+        Thread.getName() используется для получения имени потока.
+        """
+
         print(f'{self.name} starts')
 
         self.count_three_sum(self.ints)
@@ -64,11 +92,11 @@ if __name__ == '__main__':
     task = ThreeSumUnitOfWork(ints)
     task.start()
 
-    time.sleep(5)
+    time.sleep(3)
 
     task.stop()
 
     task.join()
 
-    print(task.stopped())
+    print(f'Flag status: {task.stopped()}')
     print('ended main')

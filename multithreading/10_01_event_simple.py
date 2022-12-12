@@ -8,6 +8,8 @@ event = threading.Event()
 
 def test():
     """
+
+
     Все потоки продолжат выполнение, когда Event=True
     Тогда мы разблокируем значение wait и пойдём ниже
     event.clear() - сбросить до False
@@ -23,7 +25,7 @@ def test():
         time.sleep(2)
 
 
-event.clear()
+# event.clear()
 # Для сбрасывания значения к False
 
 threading.Thread(target=test).start()
