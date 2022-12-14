@@ -9,6 +9,7 @@ class Terminal:
         loop = asyncio.get_running_loop()
         future = loop.create_future()
 
+        # Оборачиваем работу, которая исполняется в отдельном потоке
         t = threading.Thread(target=self.run_cmd, args=(loop, future,))
         t.start()
 
