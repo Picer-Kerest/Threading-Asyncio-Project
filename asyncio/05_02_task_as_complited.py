@@ -19,8 +19,11 @@ async def main():
     t2 = asyncio.create_task(tock())
 
     # results = await asyncio.gather(t1, t2)
-    # results = await asyncio.as_completed((t1, t2))
+    # возвращает результаты в списке в соответствии заданного порядка
 
+    # as_completed. Объекты передаются в списке или в кортеже
+    # await в цикле обязателен
+    # enumerate начинает с 1
     for i, t in enumerate(asyncio.as_completed((t1, t2)), start=1):
         result = await t
         elapsed = time.perf_counter() - start

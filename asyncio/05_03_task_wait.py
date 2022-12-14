@@ -28,11 +28,17 @@ async def fetch_ip(service):
 
 async def main():
     coros = [fetch_ip(service) for service in services]
+    # список корутинов
 
-    done, pending = await asyncio.wait(coros, return_when=FIRST_COMPLETED)
+    for coro in asyncio.as_completed(coros):
+        result = await coro
+        print(result)
 
-    for x in done:
-        print(x.result())
+    # done, pending = await asyncio.wait(coros, return_when=FIRST_COMPLETED)
+    # return_when=FIRST_COMPLETED. Когда закончилась одна из корутин, остальные отменяются
+
+    # for x in done:
+    #     print(x.result())
 
 
 if __name__ == '__main__':

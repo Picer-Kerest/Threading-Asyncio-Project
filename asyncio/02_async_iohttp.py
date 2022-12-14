@@ -23,9 +23,9 @@ def print_photo_titles(photos):
         print(f'{photo.title}', end='\n')
 
 
-async def photos_by_album(task_name, album, session):
+async def photos_by_album(task_name, album_id, session):
     print(f'{task_name=}')
-    url = f'https://jsonplaceholder.typicode.com/photos?albumId={album}'
+    url = f'https://jsonplaceholder.typicode.com/photos?albumId={album_id}'
 
     response = await session.get(url)
     photos_json = await response.json()
@@ -36,21 +36,27 @@ async def photos_by_album(task_name, album, session):
 @async_measure_time
 async def main():
     # async with aiohttp.ClientSession() as session:
-        # photos = await photos_by_album('Task 1', 3, session)
-        # print_photo_titles(photos)
+    #     photos = await photos_by_album('Task 1', 3, session)
+    #     print_photo_titles(photos)
+
     async with aiohttp.ClientSession() as session:
-        photos_in_albums = await asyncio.gather(*(photos_by_album(f'Task {i + 1}', album, session)
-                                        for i, album in enumerate(range(2,30))))
+        photos_in_albums = await asyncio.gather(*(photos_by_album(f'Task {i + 1}', album_id, session)
+                                                  for i, album_id in enumerate(range(1, 101))))
 
         photos_count = sum([len(cur) for cur in photos_in_albums])
         print(f'{photos_count=}')
 
 
 if __name__ == '__main__':
-    #  asyncio.run(main())
+    # TRUE параллельно
+
+    # asyncio.run(main())
+
     loop = asyncio.get_event_loop()
-    try:
-        loop.create_task(main())
-        loop.run_forever()
-    finally:
-        loop.close()
+    loop.run_until_complete(main())
+    # loop = asyncio.get_event_loop()
+    # try:
+    #     loop.create_task(main())
+    #     loop.run_forever()
+    # finally:
+    #     loop.close()
