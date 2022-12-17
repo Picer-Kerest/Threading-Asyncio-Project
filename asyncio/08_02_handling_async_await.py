@@ -5,6 +5,9 @@ import aiohttp
 
 
 class Photo:
+    """
+    async await исключение на нижнем уровне, которое не останавливает генератор
+    """
     def __init__(self, album_id, photo_id, title, url, thumbnail_url):
         self.url = url
         self.thumbnail_url = thumbnail_url
@@ -22,11 +25,10 @@ def print_photo_title(photos):
         print(f'{photo.title}', end='\n')
 
 
-# В этом случае обработки исключения на 3-ей итерации мы провалимся и перейдем к 4-ой.
 async def photos_by_album(task_name, album, session):
+    # исключение если не подходит по типу
     if not isinstance(album, int):
         raise RuntimeError('invalid album number')
-
     print(f'{task_name=}')
     url = f'https://jsonplaceholder.typicode.com/photos?albumId={album}'
 
@@ -37,9 +39,18 @@ async def photos_by_album(task_name, album, session):
 
 
 async def download_albums(albums):
+    """
+    Мы можем отловить исключение из photos_by_album здесь.
+    Когда мы делаем await, то мы забираем значение.
+    Если будет исключение, то мы его отловим и программа продолжит выполнение
+    Программа не будет прибита
+
+    Также можем отловить это на уровне async for
+    Если сделать это же, но в async for, то до четвёрки мы не дойдём,
+    так как после встречи исключения генератор останавливается
+    """
     async with aiohttp.ClientSession() as session:
         for album in albums:
-            # Отлов исключения ближе к источнику возникновения, позволит нам продолжить выполнение основной программы.
             try:
                 yield await photos_by_album(f't{album}', album, session)
             except Exception as ex:

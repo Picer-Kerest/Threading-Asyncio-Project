@@ -18,9 +18,9 @@ class Photo:
         return Photo(obj['albumId'], obj['id'], obj['title'], obj['url'], obj['thumbnailUrl'])
 
 
-def print_photo_titles(photos):
-    for photo in photos:
-        print(f'{photo.title}', end='\n')
+# def print_photo_titles(photos):
+#     for photo in photos:
+#         print(f'{photo.title}', end='\n')
 
 
 async def photos_by_album(task_name, album_id, session):

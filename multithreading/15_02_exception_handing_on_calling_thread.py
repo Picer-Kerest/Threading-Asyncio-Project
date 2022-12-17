@@ -21,7 +21,7 @@ def div(divisor, limit):
     print('raise exception from def')
     raise Exception('bad thing happen!')
 
-    return result
+    # return result
 
 
 # Пример с Map

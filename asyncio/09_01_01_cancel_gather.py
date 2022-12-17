@@ -34,6 +34,8 @@ async def photos_by_album(task_name, album, session):
     photos_json = await response.json()
 
     sleeping_period = 3 if task_name == 't3' else 1
+    # Период сна для тасок
+
     print(f'{task_name=} sleeping')
     await asyncio.sleep(sleeping_period)
     print(f'{task_name=} finished sleeping')
@@ -43,6 +45,9 @@ async def photos_by_album(task_name, album, session):
 
 
 def get_coros(session):
+    """
+    Метод, который возвращает список корутинов
+    """
     return [
         photos_by_album('t1', 1, session),
         photos_by_album('t2', 2, session),
@@ -88,6 +93,10 @@ async def main_gather_cancel_on_task():
 
 
 async def main_gather_cancel_on_future():
+    """
+    gather на future
+    Здесь это будет работать
+    """
     async with aiohttp.ClientSession() as session:
         future = asyncio.gather(*(get_coros(session)))
 
