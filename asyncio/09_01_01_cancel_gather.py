@@ -57,6 +57,9 @@ def get_coros(session):
 
 
 def cancel_future(loop, future, after):
+    """
+    Ситуация когда cancel на Future работает
+    """
     def inner_cancel():
         print('sleeping before future cancel')
         time.sleep(after)
@@ -67,7 +70,27 @@ def cancel_future(loop, future, after):
     t.start()
 
 
+async def main_gather_cancel_on_future():
+    """
+    gather на future
+    Здесь это будет работать
+    """
+    async with aiohttp.ClientSession() as session:
+        future = asyncio.gather(*(get_coros(session)))
+
+        cancel_future(asyncio.get_running_loop(), future, 2)
+
+        try:
+            print('awaiting future')
+            result = await future
+        except asyncio.exceptions.CancelledError as ex:
+            print(f'Excepted at await {repr(ex)}')
+
+
 def cancel_tasks(task, after):
+    """
+    Gather на тасках
+    """
     def inner_cancel():
         time.sleep(after)
         for i, t in enumerate(task, start=1):
@@ -92,24 +115,10 @@ async def main_gather_cancel_on_task():
             print(f'Excepted at await {repr(ex)}')
 
 
-async def main_gather_cancel_on_future():
-    """
-    gather на future
-    Здесь это будет работать
-    """
-    async with aiohttp.ClientSession() as session:
-        future = asyncio.gather(*(get_coros(session)))
-
-        cancel_future(asyncio.get_running_loop(), future, 2)
-
-        try:
-            print('awaiting future')
-            result = await future
-        except asyncio.exceptions.CancelledError as ex:
-            print(f'Excepted at await {repr(ex)}')
-
-
 async def main_gather_return_exceptions():
+    """
+    return_exceptions=True
+    """
     async with aiohttp.ClientSession() as session:
         tasks = [asyncio.create_task(coro) for coro in get_coros(session)]
         future = asyncio.gather(*tasks, return_exceptions=True)
@@ -129,7 +138,12 @@ async def main_gather_return_exceptions():
 
 
 if __name__ == '__main__':
-    asyncio.run(main_gather_return_exceptions())
-    # asyncio.run(main_gather_cancel_on_task())
-    #
-    # asyncio.run(main_gather_cancel_on_future())
+    loop = asyncio.get_event_loop()
+
+    try:
+        loop.create_task(main_gather_return_exceptions())
+        loop.run_forever()
+    finally:
+        print('Loop close')
+        loop.close()
+

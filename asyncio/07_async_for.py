@@ -12,6 +12,9 @@ async def fetch_doc(doc):
 
 
 async def get_pages(docs):
+    """
+    Генератор с async for
+    """
     for cur_doc in docs:
         doc = await fetch_doc(cur_doc)
         for page in doc:

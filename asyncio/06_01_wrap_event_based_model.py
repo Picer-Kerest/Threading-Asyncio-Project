@@ -35,6 +35,8 @@ class Terminal:
 
         loop.call_soon_threadsafe(future.set_result, 1)
         Единица - то, что будет выведено при завершении программы
+
+        В итоге во Future запишется результат,
         """
         time.sleep(3)
         loop.call_soon_threadsafe(future.set_result, 'Successful')
